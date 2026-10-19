@@ -1,0 +1,27 @@
+name: Auto-Create Repository Folders
+
+on:
+  push:
+    branches: [ main, master ]
+
+# Grants GitHub Actions permission to push changes back to the repository
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create directories and .gitkeep
+        run: |
+          mkdir -p basics pointers data_structures algorithms projects
+          touch basics/.gitkeep pointers/.gitkeep data_structures/.gitkeep algorithms/.gitkeep projects/.gitkeep
+
+      - name: Commit and push if changes exist
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto-generated C repository folder structure from workflow"
+          branch: main
